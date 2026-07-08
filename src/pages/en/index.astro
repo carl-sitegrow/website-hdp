@@ -1,0 +1,23 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import HomeHero from '@components/home/HomeHero.astro';
+import HomeFeaturesSection from '@components/home/HomeFeaturesSection.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { buildHomeGraph } from '@/lib/schema';
+import { siteConfig } from '@/config/site';
+
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const homeGraph = buildHomeGraph(origin, { lang: 'en-CA' });
+---
+<PageLayout
+  lang="en-CA"
+  title={`${siteConfig.siteName} | ${siteConfig.city}, ${siteConfig.region}`}
+  description={siteConfig.defaultDescription}
+  showBreadcrumb={false}
+>
+  <JsonLd schema={homeGraph} />
+  <main>
+    <HomeHero />
+    <HomeFeaturesSection />
+  </main>
+</PageLayout>

@@ -1,0 +1,140 @@
+---
+import { siteConfig } from '@/config/site';
+import type { Post } from '@/data/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const canonicalPath = `/blog/${post.slug}/`;
+const canonicalUrl = new URL(canonicalPath, origin).href;
+const heroUrl = post.image
+  ? new URL(`${post.image}.webp`, origin).href
+  : new URL('/images/og-default.webp', origin).href;
+
+// CSS minimal inline pour AMP — doit faire < 75KB
+const ampCustomCss = `
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: #1b1b1f;
+    background: #ffffff;
+    margin: 0;
+    line-height: 1.6;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+  .eyebrow {
+    display: inline-block;
+    background: rgba(138, 92, 246, 0.1);
+    color: #8A5CF6;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    margin-bottom: 16px;
+  }
+  h1 { font-size: 36px; line-height: 1.2; margin: 0 0 16px; font-weight: 800; }
+  .summary { font-size: 20px; color: #6b7280; margin: 0 0 24px; }
+  .meta { font-size: 14px; color: #6b7280; margin-bottom: 32px; }
+  .hero amp-img { border-radius: 12px; overflow: hidden; margin: 0 0 32px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 32px 0 12px; color: #1b1b1f; }
+  p { font-size: 17px; color: #4b5563; margin: 0 0 16px; }
+  ul { padding-left: 20px; margin: 0 0 16px; }
+  li { font-size: 17px; color: #4b5563; margin-bottom: 8px; }
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 24px;
+    margin-top: 48px;
+  }
+  .author amp-img { border-radius: 9999px; }
+  .author-name { font-weight: 700; color: #1b1b1f; }
+  .author-role { font-size: 14px; color: #6b7280; }
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: #6b7280;
+    font-size: 14px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin-top: 32px;
+  }
+  footer a { color: #8A5CF6; text-decoration: none; font-weight: 600; }
+`;
+---
+<!doctype html>
+<html ⚡ lang="fr-CA">
+  <head>
+    <meta charset="utf-8" />
+    <title>{post.title} | {siteConfig.siteName}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1" />
+    <meta name="description" content={post.summary} />
+    <meta name="robots" content="noindex,follow" />
+    <script is:inline async src="https://cdn.ampproject.org/v0.js"></script>
+    <style amp-boilerplate>
+      body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}
+    </style>
+    <noscript>
+      <style amp-boilerplate>
+        body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}
+      </style>
+    </noscript>
+    <style amp-custom set:html={ampCustomCss} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+  </head>
+  <body>
+    <article class="container">
+      {post.category && <span class="eyebrow">{post.category}</span>}
+      <h1>{post.title}</h1>
+      <p class="summary">{post.summary}</p>
+      <div class="meta">
+        {post.date}{post.author ? ` · ${post.author.name}` : ''}
+      </div>
+
+      <div class="hero">
+        <amp-img
+          src={heroUrl}
+          alt={post.imageAlt ?? post.title}
+          width="1200"
+          height="630"
+          layout="responsive"
+        ></amp-img>
+      </div>
+
+      {post.sections.map((section) => (
+        <section>
+          {section.heading && <h2>{section.heading}</h2>}
+          {section.paragraphs.map((p) => <p>{p}</p>)}
+          {section.bullets && (
+            <ul>
+              {section.bullets.map((item) => <li>{item}</li>)}
+            </ul>
+          )}
+        </section>
+      ))}
+
+      {post.author && (
+        <div class="author">
+          <amp-img
+            src={new URL(`${post.author.image}.webp`, origin).href}
+            alt={post.author.name}
+            width="56"
+            height="56"
+          ></amp-img>
+          <div>
+            <div class="author-name">{post.author.name}</div>
+            <div class="author-role">{post.author.role}</div>
+          </div>
+        </div>
+      )}
+    </article>
+
+    <footer>
+      <a href={canonicalUrl}>Voir la version complète sur {siteConfig.siteName}</a>
+    </footer>
+  </body>
+</html>

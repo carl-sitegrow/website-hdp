@@ -1,0 +1,96 @@
+---
+/**
+ * Image responsive : assemble un <picture> AVIF + WebP avec srcset (descripteurs
+ * de largeur) + sizes, à partir d'un chemin de base sans extension.
+ *
+ * Détecte au build (fs) les variantes réellement générées par optimize-image.js
+ * (base-400.webp, base-800.webp, …). Si aucune variante n'existe, retombe sur
+ * l'image unique base.webp/.avif → jamais de 404, compatible avec l'existant.
+ *
+ * Exemple :
+ *   <ResponsiveImage src="/images/services/service-1" alt="…" width={800}
+ *     height={600} sizes="(min-width: 1024px) 560px, 100vw" class="…" />
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  /** Chemin de base sans extension, ex. /images/services/service-1 */
+  src: string;
+  alt: string;
+  /** Largeurs candidates (doivent correspondre à optimize-image.js). */
+  widths?: number[];
+  /** Attribut sizes ; à adapter à la place réelle de l'image dans la grille. */
+  sizes?: string;
+  /** Dimensions intrinsèques de la plus grande variante (anti-CLS). */
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  decoding?: 'async' | 'sync' | 'auto';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  widths = [400, 800, 1200, 1600],
+  sizes = '100vw',
+  width,
+  height,
+  loading = 'lazy',
+  fetchpriority,
+  decoding = 'async',
+  class: className,
+} = Astro.props;
+
+const publicDir = path.join(process.cwd(), 'public');
+const rel = src.replace(/^\//, '');
+const hasFile = (p: string) => {
+  try {
+    return fs.existsSync(path.join(publicDir, p));
+  } catch {
+    return false;
+  }
+};
+
+// Variantes de largeur réellement présentes dans public/ (ascendant).
+const variantWidths = widths.filter((w) => hasFile(`${rel}-${w}.webp`));
+const baseExists = hasFile(`${rel}.webp`);
+
+// Descripteurs du srcset : variantes + image pleine taille (base) au descripteur
+// `width`, pour que la plus grande version reste sélectionnable sur desktop.
+type Descriptor = { w: number; base: boolean };
+const descriptors: Descriptor[] = variantWidths.map((w) => ({ w, base: false }));
+if (baseExists && width && !variantWidths.includes(width)) {
+  descriptors.push({ w: width, base: true });
+}
+descriptors.sort((a, b) => a.w - b.w);
+
+const responsive = descriptors.length > 1;
+const url = (d: Descriptor, ext: string) => (d.base ? `${src}.${ext}` : `${src}-${d.w}.${ext}`);
+const srcset = (ext: string) =>
+  responsive ? descriptors.map((d) => `${url(d, ext)} ${d.w}w`).join(', ') : `${src}.${ext}`;
+
+// Repli <img> : image de base pleine taille si présente, sinon plus grande variante.
+const fallbackSrc = baseExists
+  ? `${src}.webp`
+  : variantWidths.length > 0
+    ? `${src}-${variantWidths[variantWidths.length - 1]}.webp`
+    : `${src}.webp`;
+---
+
+<picture>
+  <source type="image/avif" srcset={srcset('avif')} sizes={responsive ? sizes : undefined} />
+  <source type="image/webp" srcset={srcset('webp')} sizes={responsive ? sizes : undefined} />
+  <img
+    src={fallbackSrc}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding={decoding}
+    class={className}
+  />
+</picture>

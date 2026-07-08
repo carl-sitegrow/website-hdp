@@ -1,0 +1,53 @@
+---
+import type { BreadcrumbItem } from '@/lib/breadcrumb';
+import JsonLd from '@components/JsonLd.astro';
+
+interface Props {
+  items?: BreadcrumbItem[] | null;
+}
+
+const { items } = Astro.props;
+
+if (!items?.length) return;
+
+// Données structurées BreadcrumbList pour Google
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, origin).href } : {}),
+  })),
+};
+---
+<JsonLd schema={breadcrumbSchema} />
+<nav aria-label="Fil d'Ariane">
+  <div class="mx-auto max-w-6xl px-5 py-3 sm:px-8 lg:px-10">
+    <ol class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
+      {items.map((item, index) => {
+        const isLast = index === items.length - 1;
+        return (
+          <li class="flex min-w-0 items-center gap-1.5">
+            {index > 0 && (
+              <span class="text-muted/50 select-none" aria-hidden="true">
+                ›
+              </span>
+            )}
+            {item.href && !isLast ? (
+              <a href={item.href} class="font-medium text-brand transition-colors hover:text-brand-hover">
+                {item.label}
+              </a>
+            ) : (
+              <span class="truncate font-medium text-muted" aria-current="page">
+                {item.label}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</nav>

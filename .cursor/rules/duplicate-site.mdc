@@ -1,0 +1,58 @@
+---
+description: Guide interactif pour dupliquer ou reconfigurer le site (nouveau client / marque). S'active quand l'utilisateur dit "duplique", "nouveau site", "clone", "autre ville".
+alwaysApply: true
+---
+
+# Dupliquer ou reconfigurer le site
+
+Quand l'utilisateur demande de dupliquer ou reconfigurer le projet (gabarit "Sitegrow Skeleton") pour un autre client ou une autre marque, suivre ce processus interactif.
+
+## Étape 1 — Infos essentielles
+
+Utiliser `AskQuestion` pour demander :
+
+1. **Nom commercial affiché** (ex. Acme Manufacturing) → `siteConfig.siteName`
+2. **Ville / région** → `siteConfig.city`, `siteConfig.region`
+3. **Domaine** (ex. `exemple.com`) → `siteConfig.domain`, `.env: SITE_DOMAIN`
+4. **URL canonique** (ex. `https://exemple.com`) → `siteConfig.url`, `.env: SITE_URL`
+5. **Courriel de contact** (ex. `info@exemple.com`) → `siteConfig.contactEmail`, `.env: CONTACT_EMAIL`
+6. **Réseaux sociaux** (URLs ou vides) → `siteConfig.social.{instagram,facebook,linkedin,youtube,x}`
+
+## Étape 2 — Contenu métier
+
+Demander selon le besoin :
+
+- **SEO** : `siteConfig.defaultDescription` (utilisé en meta description par défaut)
+- **Adresse physique** : `siteConfig.address.{street,city,region,postalCode,country}` (active le JSON-LD `LocalBusiness` quand `siteConfig.businessType = 'LocalBusiness'`)
+- **Téléphone / heures / géo** : `siteConfig.phone`, `siteConfig.openingHours`, `siteConfig.geo`
+- **Pages clés** : titres et textes dans `src/data/{services,about,contact,privacy}.ts`
+- **Navigation** : `siteConfig.nav` (liens header), `siteConfig.navCta` (bouton header), `siteConfig.footer` (colonnes + mentions légales)
+
+## Étape 3 — Visuels
+
+- Logo : `public/images/logo/` (cf. `.cursor/rules/images-workflow.mdc`)
+- Images d'illustration : `public/images/{services,about,...}/` (slug SEO + AVIF/WebP)
+- Image OG par défaut : régénérer via `node scripts/generate-og-default.js` (lit `siteConfig.siteName` + `city`)
+- Vérifier les chemins d'images dans `src/data/*.ts` (pas de chemins d'un ancien déploiement)
+
+## Étape 4 — Appliquer
+
+| Fichier | Rôle |
+|---------|------|
+| `src/config/site.ts` | Configuration maîtresse (textes, nav, footer, schéma business) |
+| `src/config/siteConfigZod.ts` | Schéma Zod pour valider `siteConfig` (lancé par `npm run validate`) |
+| `src/data/{services,about,contact,privacy}.ts` | Contenu FR des pages (les pages EN miroirnt `/en/*` mais restent `noindex` jusqu'à traduction) |
+| `.env` + `.env.example` | `SITE_URL`, `SITE_DOMAIN`, `CONTACT_EMAIL`, `PUBLIC_FORMSPREE_ID` |
+| `astro.config.mjs` | `site:` (fallback), `env.schema` (variables typées via `astro:env`) |
+
+## Étape 5 — Vérifier après duplication
+
+```bash
+npm run setup      # met à jour .env interactivement
+npm run check:all  # types + lint + format
+npm run build      # build de production (échoue si SITE_URL manquant en prod)
+```
+
+## Règle importante
+
+Même après duplication, **ne pas hardcoder** ville, région, courriel ou nom commercial dans les `.astro` : toujours lire depuis `siteConfig.*`. Les pages EN dupliquées ne doivent pas non plus hardcoder — elles lisent les mêmes `src/data/*` tant qu'il n'y a pas de variantes EN dédiées.

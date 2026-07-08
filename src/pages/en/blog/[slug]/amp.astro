@@ -1,0 +1,19 @@
+---
+// AMP variant for /en/blog/[slug]/ — currently INACTIVE.
+//
+// The site's content model (src/data/posts.ts) doesn't yet expose per-post EN slugs
+// (no `enSlug` field on the Post type, no EN translation of `sections`).
+// When EN blog posts land, fill in `getStaticPaths` like the FR version
+// (src/pages/blog/[slug]/amp.astro) and remove the placeholder redirect below.
+import BlogPostAmpLayout from '@layouts/BlogPostAmpLayout.astro';
+import type { Post } from '@/data/posts';
+
+// Placeholder — currently returns no paths so Astro doesn't generate anything.
+// Returns the empty array to keep the file valid without producing 404 routes.
+export function getStaticPaths() {
+  return [] as { params: { slug: string }; props: { post: Post } }[];
+}
+
+const { post } = Astro.props as { post: Post };
+---
+<BlogPostAmpLayout post={post} />

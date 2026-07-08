@@ -1,0 +1,168 @@
+---
+import { siteConfig } from '@/config/site';
+import SiteLogo from '@components/home/SiteLogo.astro';
+
+interface Props {
+  activeNav?: string;
+  /** 'fr' | 'en' — ajuste quelques libellés. */
+  lang?: 'fr' | 'en';
+}
+
+const { nav, navCta } = siteConfig;
+const { activeNav, lang = 'fr' } = Astro.props;
+const menuLabel = lang === 'en' ? 'Open menu' : 'Ouvrir le menu';
+const closeLabel = lang === 'en' ? 'Close menu' : 'Fermer le menu';
+const navLabel = lang === 'en' ? 'Main navigation' : 'Navigation principale';
+---
+<header class="sticky top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-md">
+  <div class="relative z-[110] mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-6 sm:px-8 lg:px-10">
+    <SiteLogo height={40} />
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label={navLabel}>
+      {nav.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-[15px] font-medium transition-colors',
+            activeNav === link.label ? 'text-brand' : 'text-muted hover:text-ink',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={navCta.href}
+        class="hidden rounded-md bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover md:inline-flex"
+      >
+        {navCta.label}
+      </a>
+
+      <button
+        type="button"
+        id="home-mobile-menu-btn"
+        class="relative flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+        aria-label={menuLabel}
+        aria-expanded="false"
+        aria-controls="home-mobile-menu"
+      >
+        <span class="home-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+        <span class="home-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+        <span class="home-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div
+  id="home-mobile-menu"
+  class="fixed inset-0 z-[100] hidden flex-col items-center justify-center gap-8 bg-white/95 px-6 opacity-0 backdrop-blur-lg transition-opacity duration-300 md:hidden"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label={navLabel}
+>
+  <button
+    type="button"
+    id="home-mobile-menu-close"
+    class="absolute right-5 top-6 flex h-10 w-10 items-center justify-center text-ink sm:right-8"
+    aria-label={closeLabel}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <nav class="flex flex-col items-center gap-6" aria-label={lang === 'en' ? 'Mobile navigation' : 'Navigation mobile'}>
+    {nav.map((link) => (
+      <a href={link.href} class="text-xl font-semibold text-ink">{link.label}</a>
+    ))}
+  </nav>
+  <a href={navCta.href} class="rounded-md bg-brand px-6 py-3 text-sm font-semibold text-white">
+    {navCta.label}
+  </a>
+</div>
+
+<style>
+  #home-mobile-menu-btn[aria-expanded='true'] .home-menu-line:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+  #home-mobile-menu-btn[aria-expanded='true'] .home-menu-line:nth-child(2) {
+    opacity: 0;
+  }
+  #home-mobile-menu-btn[aria-expanded='true'] .home-menu-line:nth-child(3) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  function initHomeMobileMenu() {
+    const btnEl = document.getElementById('home-mobile-menu-btn');
+    const menuEl = document.getElementById('home-mobile-menu');
+    if (!btnEl || !menuEl) return;
+    const btn: HTMLElement = btnEl;
+    const menu: HTMLElement = menuEl;
+    if (btn.dataset.menuInit === 'true') return;
+    btn.dataset.menuInit = 'true';
+
+    const openLabel = btn.getAttribute('aria-label') ?? 'Ouvrir le menu';
+    const closeLabel = document.getElementById('home-mobile-menu-close')?.getAttribute('aria-label') ?? 'Fermer le menu';
+
+    function closeMenu() {
+      menu.classList.remove('opacity-100', 'pointer-events-auto');
+      menu.classList.add('opacity-0', 'pointer-events-none');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', openLabel);
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+
+      const onEnd = () => {
+        if (menu.classList.contains('opacity-0')) {
+          menu.classList.remove('flex');
+          menu.classList.add('hidden');
+        }
+      };
+      menu.addEventListener('transitionend', onEnd, { once: true });
+    }
+
+    function openMenu() {
+      menu.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      menu.classList.add('flex', 'pointer-events-auto');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', closeLabel);
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      requestAnimationFrame(() => menu.classList.add('opacity-100'));
+    }
+
+    btn.onclick = () => {
+      if (btn.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    };
+
+    const closeBtn = document.getElementById('home-mobile-menu-close');
+    if (closeBtn) closeBtn.onclick = () => closeMenu();
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.onclick = () => closeMenu();
+    });
+
+    document.onkeydown = (event) => {
+      if (event.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+      }
+    };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomeMobileMenu);
+  } else {
+    initHomeMobileMenu();
+  }
+  document.addEventListener('astro:page-load', initHomeMobileMenu);
+</script>

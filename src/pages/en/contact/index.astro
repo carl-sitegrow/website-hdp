@@ -1,0 +1,17 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ContactSection from '@components/ContactSection.astro';
+import { siteConfig } from '@/config/site';
+import { contactContent } from '@/data/contact';
+import { breadcrumbTrails } from '@/lib/breadcrumb';
+---
+<PageLayout
+  lang="en-CA"
+  title={`${contactContent.title} | ${siteConfig.siteName}`}
+  description={contactContent.subtitle}
+  breadcrumbs={breadcrumbTrails.contact('en')}
+>
+  <main>
+    <ContactSection />
+  </main>
+</PageLayout>

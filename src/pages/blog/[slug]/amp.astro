@@ -1,0 +1,18 @@
+---
+import BlogPostAmpLayout from '@layouts/BlogPostAmpLayout.astro';
+import { getPostBySlug, getPublishedPosts } from '@/data/posts';
+
+export function getStaticPaths() {
+  return getPublishedPosts().map((post) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = slug ? getPostBySlug(slug) : undefined;
+
+if (!post) {
+  return Astro.redirect('/404/');
+}
+---
+<BlogPostAmpLayout post={post} />

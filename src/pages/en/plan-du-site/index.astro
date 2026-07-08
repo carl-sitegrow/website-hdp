@@ -1,0 +1,55 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { breadcrumbTrails, enPagesList } from '@/lib/breadcrumb';
+import { siteConfig } from '@/config/site';
+
+const mainLinks = enPagesList.filter((l) => l.section === 'main');
+const legalLinks = enPagesList.filter((l) => l.section === 'legal');
+---
+<PageLayout
+  lang="en-CA"
+  title={`Sitemap | ${siteConfig.siteName}`}
+  description="Sitemap — find every page in one place."
+  breadcrumbs={breadcrumbTrails.plan('en')}
+>
+  <main class="px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="text-4xl font-bold tracking-[-0.02em] text-ink sm:text-5xl">Sitemap</h1>
+      <p class="mt-6 text-lg leading-relaxed text-muted">
+        All {siteConfig.siteName} pages in one place.
+      </p>
+
+      <nav aria-label="Sitemap" class="mt-12">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.1em] text-brand">Main pages</h2>
+        <ul class="mt-6 flex flex-col gap-3">
+          {mainLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="inline-flex items-center gap-2 text-lg font-medium text-ink transition-colors hover:text-brand"
+              >
+                <span aria-hidden="true">→</span>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <h2 class="mt-12 text-sm font-semibold uppercase tracking-[0.1em] text-brand">Legal</h2>
+        <ul class="mt-6 flex flex-col gap-3">
+          {legalLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="inline-flex items-center gap-2 text-base text-muted transition-colors hover:text-brand"
+              >
+                <span aria-hidden="true">→</span>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </main>
+</PageLayout>

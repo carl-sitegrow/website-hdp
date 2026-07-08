@@ -1,0 +1,16 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import PostsListSection from '@components/post/PostsListSection.astro';
+import { siteConfig } from '@/config/site';
+import { postUi } from '@/data/posts';
+import { breadcrumbTrails } from '@/lib/breadcrumb';
+---
+<PageLayout
+  title={`${postUi.listTitle} | ${siteConfig.siteName}`}
+  description={postUi.listSubtitle}
+  breadcrumbs={breadcrumbTrails.blog('fr')}
+>
+  <main>
+    <PostsListSection />
+  </main>
+</PageLayout>

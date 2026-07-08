@@ -1,0 +1,102 @@
+---
+/**
+ * Balises SEO réutilisables : canonical + Open Graph + Twitter Card + hreflang.
+ * Inclus dans le <head> de PageLayout. Non destructif : s'ajoute
+ * aux <title>/<meta description> existants.
+ *
+ * NOTE: l'URL canonique dépend de `site` dans astro.config (process.env.SITE_URL).
+ * En prod, SITE_URL DOIT être défini, sinon les URLs pointent sur le placeholder.
+ */
+import { siteConfig } from '@/config/site';
+import { OG_IMAGE, absoluteUrl } from '@/lib/seo';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Chemin d'image OG (relatif avec extension, ou absolu). Défaut = og-default.png */
+  image?: string;
+  /** Texte alternatif de l'image OG (défaut = titre de la page). */
+  imageAlt?: string;
+  /** Dimensions de l'image OG custom (l'image par défaut est déjà en 1200×630). */
+  imageWidth?: number;
+  imageHeight?: number;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = '',
+  image,
+  imageAlt,
+  imageWidth,
+  imageHeight,
+  type = 'website',
+} = Astro.props;
+
+const site = Astro.site ?? new URL(siteConfig.url);
+const pathname = Astro.url.pathname;
+
+// URL canonique (toutes les routes portent un slash final grâce au middleware)
+const canonical = absoluteUrl(pathname, site);
+
+// Image OG : custom si fournie (dimensions optionnelles), sinon l'image par
+// défaut dont on connaît les dimensions et le type.
+const usingDefaultImage = !image;
+const ogImage = absoluteUrl(image ?? OG_IMAGE.path, site);
+const ogImageAlt = imageAlt ?? title;
+const ogWidth = usingDefaultImage ? OG_IMAGE.width : imageWidth;
+const ogHeight = usingDefaultImage ? OG_IMAGE.height : imageHeight;
+const ogImageType = usingDefaultImage ? OG_IMAGE.type : undefined;
+
+// i18n : détecte la langue via le préfixe /en/
+const isEn = pathname === '/en' || pathname.startsWith('/en/');
+const ogLocale = isEn ? 'en_CA' : 'fr_CA';
+const ogLocaleAlt = isEn ? 'fr_CA' : 'en_CA';
+
+// URLs alternates (FR = sans /en/, EN = avec /en/)
+const stripEn = (p: string) => (p === '/en' || p === '/en/' ? '/' : p.replace(/^\/en(\/|$)/, '/'));
+const addEn = (p: string) => (p === '/' ? '/en/' : `/en${p}`);
+const frPath = stripEn(pathname);
+const enPath = addEn(frPath);
+const frUrl = absoluteUrl(frPath, site);
+const enUrl = absoluteUrl(enPath, site);
+const xDefaultUrl = frUrl;
+
+// N'annoncer l'alternative EN que si le miroir anglais est réellement indexable.
+// Sinon on ne référence pas une page noindex dans le cluster hreflang.
+const showEnAlternate = siteConfig.enIndexable;
+
+// Flux RSS correspondant à la langue de la page (découverte par les agrégateurs).
+const rssUrl = absoluteUrl(isEn ? '/en/rss.xml' : '/rss.xml', site);
+const rssTitle = isEn ? `${siteConfig.siteName} — RSS feed` : `${siteConfig.siteName} — Flux RSS`;
+
+const twitter = siteConfig.twitterHandle;
+---
+<link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang="fr-CA" href={frUrl} />
+{showEnAlternate && <link rel="alternate" hreflang="en-CA" href={enUrl} />}
+<link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
+<link rel="alternate" type="application/rss+xml" title={rssTitle} href={rssUrl} />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteConfig.siteName} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlt} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={ogImageAlt} />
+{ogWidth && <meta property="og:image:width" content={String(ogWidth)} />}
+{ogHeight && <meta property="og:image:height" content={String(ogHeight)} />}
+{ogImageType && <meta property="og:image:type" content={ogImageType} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+{twitter && <meta name="twitter:site" content={twitter} />}
+{twitter && <meta name="twitter:creator" content={twitter} />}
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />

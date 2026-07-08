@@ -1,0 +1,22 @@
+---
+import { siteConfig } from '@/config/site';
+import FaviconHead from '@components/FaviconHead.astro';
+---
+<!doctype html>
+<html lang="fr-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={`La page que vous cherchez n'existe pas ou a été déplacée. Retournez à l'accueil de ${siteConfig.siteName}.`} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Page introuvable | {siteConfig.siteName}</title>
+    <FaviconHead />
+  </head>
+  <body>
+    <main style="font-family: system-ui; max-width: 40rem; margin: 2rem auto; padding: 0 1rem;">
+      <h1>Page introuvable</h1>
+      <p>Cette page n’existe pas ou a été déplacée.</p>
+      <p><a href="/">Retour à l’accueil</a></p>
+    </main>
+  </body>
+</html>

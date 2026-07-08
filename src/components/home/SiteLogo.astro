@@ -1,0 +1,53 @@
+---
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  class?: string;
+  height?: number;
+}
+
+const { class: className = '', height = 40 } = Astro.props;
+const logoBase = '/images/logo/logo';
+const width = Math.round(height * 3);
+
+// Convention d'images dans ce template :
+// - Logo / LCP hero : loading="eager" + fetchpriority="high" (au-dessus de la ligne de flottaison)
+// - Toutes les autres images (photos d'équipe, illustrations, etc.) : loading="lazy"
+// L'attribut fetchpriority n'est pas nécessaire sur le logo (image très petite), mais il
+// DEVRAIT être ajouté sur toute image hero ajoutée ultérieurement dans HomeHero.astro.
+---
+<a href="/" class:list={['inline-flex shrink-0 items-center', className]} aria-label={siteConfig.siteName}>
+  <picture>
+    <source srcset={`${logoBase}.avif`} type="image/avif" />
+    <source srcset={`${logoBase}.webp`} type="image/webp" />
+    <img
+      src={`${logoBase}.webp`}
+      alt={siteConfig.siteName}
+      class="site-logo-img h-auto w-auto max-h-full object-contain"
+      style={`height: ${height}px; width: auto;`}
+      width={width}
+      height={height}
+      loading="eager"
+    />
+  </picture>
+  <span class="site-logo-fallback hidden text-lg font-bold text-ink">{siteConfig.siteName}</span>
+</a>
+
+<script>
+  function syncSiteLogoFallback() {
+    document.querySelectorAll<HTMLPictureElement>('picture').forEach((pic) => {
+      const img = pic.querySelector<HTMLImageElement>('img.site-logo-img');
+      if (!img) return;
+      const fallback = img.closest('a')?.querySelector<HTMLElement>('.site-logo-fallback');
+      if (!fallback) return;
+      const broken = !img.complete || img.naturalWidth === 0;
+      img.classList.toggle('hidden', broken);
+      fallback.classList.toggle('hidden', !broken);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncSiteLogoFallback);
+  } else {
+    syncSiteLogoFallback();
+  }
+</script>

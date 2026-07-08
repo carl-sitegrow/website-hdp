@@ -1,0 +1,68 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { siteConfig } from '@/config/site';
+import { privacyContent } from '@/data/privacy';
+import { breadcrumbTrails } from '@/lib/breadcrumb';
+
+const {
+  title,
+  metaDescription,
+  lastUpdated,
+  legalEntity,
+  brandName,
+  sections,
+  officer,
+  disclaimer,
+} = privacyContent;
+---
+<PageLayout
+  title={`${title} | ${siteConfig.siteName}`}
+  description={metaDescription}
+  breadcrumbs={breadcrumbTrails.privacy('fr')}
+>
+  <main>
+    <article class="px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
+      <div class="prose-policy mx-auto max-w-3xl">
+        <h1 class="text-4xl font-bold tracking-[-0.02em] text-ink sm:text-5xl">{title}</h1>
+        <p class="mt-4 text-sm text-muted">Dernière mise à jour : {lastUpdated}</p>
+
+        <p class="mt-8 text-lg leading-relaxed text-muted">
+          Cette politique explique comment {brandName} / {legalEntity} (« nous ») recueille, utilise et protège vos
+          renseignements personnels lorsque vous utilisez notre site et nos services.
+        </p>
+
+        {sections.map((section: typeof sections[number]) => (
+          <section class="mt-12">
+            <h2 class="text-2xl font-bold text-ink">{section.title}</h2>
+            {section.paragraphs?.map((paragraph: string) => (
+              <p class="mt-4 text-base leading-relaxed text-muted">{paragraph}</p>
+            ))}
+            {'list' in section && section.list && (
+              <ul class="mt-4 list-disc space-y-2 pl-6 text-base leading-relaxed text-muted">
+                {section.list.map((item: string) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+            {'afterList' in section && section.afterList && (
+              <p class="mt-4 text-base leading-relaxed text-muted">{section.afterList}</p>
+            )}
+            {section.title.startsWith('8.') && (
+              <address class="mt-4 not-italic text-base leading-relaxed text-muted">
+                <p>{officer.name}</p>
+                <p>
+                  <a href={`mailto:${officer.email}`} class="text-brand hover:underline">{officer.email}</a>
+                </p>
+                <p>{officer.address}</p>
+              </address>
+            )}
+          </section>
+        ))}
+
+        <p class="mt-12 rounded-lg border border-black/[0.08] bg-surface p-6 text-sm leading-relaxed text-muted">
+          {disclaimer}
+        </p>
+      </div>
+    </article>
+  </main>
+</PageLayout>
