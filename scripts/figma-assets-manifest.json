@@ -18,6 +18,27 @@
   "blog": [
     {
       "id": "rituel-matin-journee-sereine",
+      "url": "https://www.figma.com/api/mcp/asset/29aee5fc-8fa6-46a9-9419-f0c57f349f7d",
+      "outputDir": "public/images/blog",
+      "outputName": "rituel-matin-journee-sereine",
+      "responsive": true
+    },
+    {
+      "id": "super-aliments-cycle-feminin",
+      "url": "https://www.figma.com/api/mcp/asset/9e90ff49-b613-4654-b7a3-915a4ba76c48",
+      "outputDir": "public/images/blog",
+      "outputName": "super-aliments-cycle-feminin",
+      "responsive": true
+    },
+    {
+      "id": "impact-sommeil-sante-mentale",
+      "url": "https://www.figma.com/api/mcp/asset/0e018106-c4cc-4dcc-b29b-c15505abc6a2",
+      "outputDir": "public/images/blog",
+      "outputName": "impact-sommeil-sante-mentale",
+      "responsive": true
+    },
+    {
+      "id": "rituel-matin-journee-sereine-listing",
       "url": "https://www.figma.com/api/mcp/asset/2cbaf09d-3791-4374-83a4-3fafffe303b4",
       "outputDir": "public/images/blog",
       "outputName": "rituel-matin-journee-sereine",

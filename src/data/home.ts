@@ -12,9 +12,9 @@ export const homeContent = {
   featuredTitle: 'Articles à la une',
   featuredLink: { label: 'Voir tout', href: '/blog/' },
   recentTitle: 'Articles récents',
-    featuredSlugs: [
-    'guide-alimentaire-cycle-feminin',
+  featuredSlugs: [
     'rituel-matin-journee-sereine',
-    'granola-maison-sans-sucre',
+    'super-aliments-cycle-feminin',
+    'impact-sommeil-sante-mentale',
   ],
 } as const;

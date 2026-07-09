@@ -21,6 +21,8 @@ export const images = {
   blog: {
     rituelMatin: '/images/blog/rituel-matin-journee-sereine',
     granola: '/images/blog/granola-maison-sans-sucre',
+    superAliments: '/images/blog/super-aliments-cycle-feminin',
+    impactSommeil: '/images/blog/impact-sommeil-sante-mentale',
     respiration: '/images/blog/respiration-consciente-stress',
     yoga: '/images/blog/yoga-doux-apaisant',
     journal: '/images/blog/journal-gratitude-quotidien',

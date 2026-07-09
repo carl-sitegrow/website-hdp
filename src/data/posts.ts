@@ -56,7 +56,6 @@ export const posts: Post[] = [
     summary:
       'Comprendre les besoins nutritionnels de notre corps tout au long du mois est la clé d’un équilibre hormonal durable.',
     published: true,
-    featured: true,
     image: images.blog.guideHero,
     imageAlt: 'Femme en méditation dans une pièce lumineuse',
     readingTime: 10,
@@ -99,7 +98,7 @@ export const posts: Post[] = [
     ],
     relatedSlugs: [
       'rituel-matin-journee-sereine',
-      'granola-maison-sans-sucre',
+      'super-aliments-cycle-feminin',
       'meditation-debutante-guide',
     ],
   },
@@ -110,7 +109,7 @@ export const posts: Post[] = [
     category: 'Bien-être',
     categorySlug: 'bien-etre',
     summary:
-      'Découvrez comment transformer vos premières minutes de la journée en un sanctuaire de paix et de clarté mentale.',
+      'Commencer la journée sans stress est un art. Découvrez nos 5 étapes pour un réveil en douceur qui change tout.',
     published: true,
     featured: true,
     image: images.blog.rituelMatin,
@@ -128,7 +127,34 @@ export const posts: Post[] = [
         ],
       },
     ],
-    relatedSlugs: ['guide-alimentaire-cycle-feminin', 'meditation-debutante-guide'],
+    relatedSlugs: ['super-aliments-cycle-feminin', 'meditation-debutante-guide'],
+  },
+  {
+    slug: 'super-aliments-cycle-feminin',
+    title: 'Les super-aliments du cycle féminin',
+    date: '2024-05-08',
+    category: 'Nutrition',
+    categorySlug: 'nutrition',
+    summary:
+      "Adapter son alimentation à son cycle hormonal permet de mieux vivre son mois. Voici ce qu'il faut privilégier.",
+    published: true,
+    featured: true,
+    image: images.blog.superAliments,
+    imageAlt: 'Bol coloré de super-aliments frais',
+    readingTime: 7,
+    author: {
+      name: 'Marie V.',
+      role: 'Nutritionniste',
+      image: images.authors.marieV,
+    },
+    sections: [
+      {
+        paragraphs: [
+          'Chaque phase du cycle féminin demande des nutriments spécifiques. En phase menstruelle, privilégiez le fer et le magnésium ; en phase folliculaire, les légumes verts et les protéines légères soutiennent la montée d’énergie.',
+        ],
+      },
+    ],
+    relatedSlugs: ['guide-alimentaire-cycle-feminin', 'granola-maison-sans-sucre'],
   },
   {
     slug: 'granola-maison-sans-sucre',
@@ -139,7 +165,6 @@ export const posts: Post[] = [
     summary:
       'Une recette simple, croquante et saine pour vos petits-déjeuners équilibrés, sans pic de glycémie.',
     published: true,
-    featured: true,
     image: images.blog.granola,
     imageAlt: 'Bol de granola aux fruits rouges',
     readingTime: 6,
@@ -157,16 +182,16 @@ export const posts: Post[] = [
     ],
   },
   {
-    slug: 'respiration-consciente-stress',
-    title: 'La respiration consciente pour apaiser le stress',
+    slug: 'impact-sommeil-sante-mentale',
+    title: "L'impact du sommeil sur votre santé mentale",
     date: '2024-05-05',
     category: 'Mental',
     categorySlug: 'mental',
     summary:
-      'Des techniques simples de cohérence cardiaque pour retrouver le calme en quelques minutes.',
+      "Une mauvaise nuit n'est pas qu'une question de fatigue. Découvrez pourquoi votre cerveau a besoin de dormir.",
     published: true,
     featured: true,
-    image: images.blog.respiration,
+    image: images.blog.impactSommeil,
     imageAlt: 'Mains tenant une tasse de thé dans un lit douillet',
     readingTime: 7,
     author: {
@@ -177,10 +202,11 @@ export const posts: Post[] = [
     sections: [
       {
         paragraphs: [
-          'La respiration est le levier le plus accessible pour réguler notre système nerveux. Cinq minutes de respiration lente et profonde peuvent réduire significativement le cortisol.',
+          'Le sommeil régule l’humeur, la concentration et la résilience émotionnelle. Un déficit chronique perturbe la production de sérotonine et amplifie le stress perçu au quotidien.',
         ],
       },
     ],
+    relatedSlugs: ['meditation-debutante-guide', 'rituel-matin-journee-sereine'],
   },
   {
     slug: 'yoga-doux-apaisant',
