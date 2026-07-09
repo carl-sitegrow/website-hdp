@@ -1,11 +1,14 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import JsonLd from '@components/JsonLd.astro';
-import PostHero from '@components/post/PostHero.astro';
-import PostBody from '@components/post/PostBody.astro';
+import PostHero from '@components/ellea/PostHero.astro';
+import PostBody from '@components/ellea/PostBody.astro';
+import SectionHeading from '@components/ellea/SectionHeading.astro';
+import ArticleCard from '@components/ellea/ArticleCard.astro';
 import { breadcrumbTrails } from '@/lib/breadcrumb';
 import { buildArticleGraph } from '@/lib/schema';
 import { formatTitle } from '@/lib/seo';
+import { getRelatedPosts, postUi } from '@/data/posts';
 import type { Post } from '@/data/posts';
 
 interface Props {
@@ -13,24 +16,36 @@ interface Props {
 }
 
 const { post } = Astro.props;
-
 const origin = Astro.site ?? new URL(Astro.url.origin);
 const path = `/blog/${post.slug}/`;
-const ampUrl = new URL(`/blog/${post.slug}/amp/`, origin).href;
 const articleGraph = buildArticleGraph(post, origin, { path, lang: 'fr-CA' });
+const related = getRelatedPosts(post);
 ---
 <PageLayout
   title={formatTitle(post.title)}
   description={post.summary}
-  image={post.image ? `${post.image}.webp` : undefined}
+  image={`${post.image}.webp`}
   imageAlt={post.imageAlt}
   type="article"
-  ampUrl={ampUrl}
   breadcrumbs={breadcrumbTrails.post(post.title, 'fr')}
+  showBreadcrumb={false}
 >
   <JsonLd schema={articleGraph} />
   <main>
     <PostHero post={post} />
     <PostBody post={post} />
+
+    {related.length > 0 && (
+      <section class="px-6 py-20 lg:px-[120px]">
+        <div class="mx-auto max-w-[1200px]">
+          <SectionHeading title={postUi.relatedTitle} class="mb-12" />
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {related.map((relatedPost) => (
+              <ArticleCard post={relatedPost} variant="related" />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
   </main>
 </PageLayout>

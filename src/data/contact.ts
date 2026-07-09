@@ -1,46 +1,45 @@
 export const contactContent = {
-  title: 'Nous joindre',
-  subtitle:
-    'Une question, un projet ou une demande de soumission ? Écrivez-nous, on vous répond rapidement.',
-  blocks: [
-    {
-      title: 'Bloc 1',
-      text: 'Décrivez ici un type de demande (information générale, partenariat, etc.).',
-    },
-    {
-      title: 'Bloc 2',
-      text: 'Décrivez ici un autre type de demande (devis, soutien technique, etc.).',
-    },
-    {
-      title: 'Bloc 3',
-      text: 'Décrivez ici un troisième type de demande pertinent.',
-    },
-  ],
-  topics: [
-    { value: 'general', label: 'Demande générale' },
-    { value: 'quote', label: 'Demande de soumission' },
-    { value: 'partnership', label: 'Partenariat' },
-    { value: 'other', label: 'Autre' },
-  ],
+  hero: {
+    title: 'Nous contacter',
+    subtitle:
+      "Une question, une suggestion ou simplement envie d'échanger ? Nous sommes là.",
+  },
+  details: {
+    title: 'Informations de contact',
+    email: 'contact@ellea.fr',
+  },
   form: {
-    title: 'Envoyez-nous un message',
-    name: 'Nom',
-    email: 'Adresse courriel',
-    topic: 'Sujet',
+    firstName: 'Prénom',
+    firstNamePlaceholder: 'Votre prénom',
+    lastName: 'Nom',
+    lastNamePlaceholder: 'Votre nom',
+    email: 'Email',
+    emailPlaceholder: 'votre@email.com',
+    subject: 'Sujet',
+    subjectPlaceholder: 'Objet de votre message',
     message: 'Message',
-    placeholder: 'Votre message…',
-    submit: 'Envoyer',
+    messagePlaceholder: 'Écrivez votre message...',
+    submit: 'Envoyer le message',
     submitting: 'Envoi…',
-    successTitle: 'Message envoyé',
-    successMessage:
-      'Merci ! Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.',
+    successTitle: 'Message envoyé !',
+    successMessage: 'Merci pour votre message. Nous vous répondrons dans les plus brefs délais.',
     successReset: 'Envoyer un autre message',
-    errorGeneric:
-      'Une erreur est survenue. Veuillez réessayer ou nous écrire directement par courriel.',
-    errorNetwork: 'Connexion impossible. Vérifiez votre réseau et réessayez.',
+    errorGeneric: 'Une erreur est survenue. Veuillez réessayer.',
+    errorNetwork: 'Erreur réseau. Vérifiez votre connexion.',
     notConfiguredTitle: 'Formulaire non configuré',
     notConfiguredMessage:
-      'Définissez PUBLIC_FORMSPREE_ID dans votre fichier .env pour activer le formulaire. Créez un formulaire gratuit sur formspree.io/forms.',
-    fallbackCta: 'Écrivez-nous par courriel',
+      'Définissez PUBLIC_FORMSPREE_ID dans votre fichier .env pour activer le formulaire de contact.',
+    fallbackCta: 'Nous écrire par courriel',
   },
+} as const;
+
+export const newsletterContent = {
+  title: 'Restons connectées',
+  subtitle:
+    'Inscrivez-vous à notre newsletter pour recevoir nos derniers articles et des surprises exclusives directement dans votre boîte mail.',
+  emailPlaceholder: 'votre@email.com',
+  submit: "S'inscrire",
+  submitting: 'Inscription…',
+  success: 'Merci ! Vous êtes inscrite à notre newsletter.',
+  error: 'Une erreur est survenue. Veuillez réessayer.',
 } as const;

@@ -1,0 +1,199 @@
+{
+  "heroes": [
+    {
+      "id": "hero-home",
+      "url": "https://www.figma.com/api/mcp/asset/5813a184-cf24-4fc4-a075-b778f36fba06",
+      "outputDir": "public/images/home",
+      "outputName": "hero-home",
+      "responsive": true
+    },
+    {
+      "id": "hero-contact",
+      "url": "https://www.figma.com/api/mcp/asset/19f414c0-382b-4ddd-930c-14512bd60406",
+      "outputDir": "public/images/contact",
+      "outputName": "hero-contact",
+      "responsive": true
+    }
+  ],
+  "blog": [
+    {
+      "id": "rituel-matin-journee-sereine",
+      "url": "https://www.figma.com/api/mcp/asset/2cbaf09d-3791-4374-83a4-3fafffe303b4",
+      "outputDir": "public/images/blog",
+      "outputName": "rituel-matin-journee-sereine",
+      "responsive": true
+    },
+    {
+      "id": "granola-maison-sans-sucre",
+      "url": "https://www.figma.com/api/mcp/asset/105884bc-f1cd-4a93-bc68-6d1d81452de5",
+      "outputDir": "public/images/blog",
+      "outputName": "granola-maison-sans-sucre",
+      "responsive": true
+    },
+    {
+      "id": "respiration-consciente-stress",
+      "url": "https://www.figma.com/api/mcp/asset/0e018106-c4cc-4dcc-b29b-c15505abc6a2",
+      "outputDir": "public/images/blog",
+      "outputName": "respiration-consciente-stress",
+      "responsive": true
+    },
+    {
+      "id": "yoga-doux-apaisant",
+      "url": "https://www.figma.com/api/mcp/asset/13b2b622-5c33-4acb-b55e-b6d770a2581b",
+      "outputDir": "public/images/blog",
+      "outputName": "yoga-doux-apaisant",
+      "responsive": true
+    },
+    {
+      "id": "journal-gratitude-quotidien",
+      "url": "https://www.figma.com/api/mcp/asset/9335d906-7e88-4713-9919-096d4d7b061f",
+      "outputDir": "public/images/blog",
+      "outputName": "journal-gratitude-quotidien",
+      "responsive": true
+    },
+    {
+      "id": "legumes-printemps-recettes",
+      "url": "https://www.figma.com/api/mcp/asset/edd9dd6f-2cc0-4353-85f2-ae3419d5643c",
+      "outputDir": "public/images/blog",
+      "outputName": "legumes-printemps-recettes",
+      "responsive": true
+    },
+    {
+      "id": "routine-soin-peau-naturelle",
+      "url": "https://www.figma.com/api/mcp/asset/c6060440-ecd3-4618-ad4e-958706eb67dc",
+      "outputDir": "public/images/blog",
+      "outputName": "routine-soin-peau-naturelle",
+      "responsive": true
+    },
+    {
+      "id": "marche-meditative-pleine-conscience",
+      "url": "https://www.figma.com/api/mcp/asset/1bcc5b1b-8650-4433-82e4-933ffb42c3d6",
+      "outputDir": "public/images/blog",
+      "outputName": "marche-meditative-pleine-conscience",
+      "responsive": true
+    },
+    {
+      "id": "sommeil-reparateur-conseils",
+      "url": "https://www.figma.com/api/mcp/asset/911ea0a3-e63c-4e86-a95d-5df82c8ce8a3",
+      "outputDir": "public/images/blog",
+      "outputName": "sommeil-reparateur-conseils",
+      "responsive": true
+    },
+    {
+      "id": "smoothie-energie-matin",
+      "url": "https://www.figma.com/api/mcp/asset/ec192c74-06e1-46a6-a493-a3cdb4e3728b",
+      "outputDir": "public/images/blog",
+      "outputName": "smoothie-energie-matin",
+      "responsive": true
+    },
+    {
+      "id": "meditation-debutante-guide",
+      "url": "https://www.figma.com/api/mcp/asset/358c2819-9e2a-411f-9397-7f763f58abe2",
+      "outputDir": "public/images/blog",
+      "outputName": "meditation-debutante-guide",
+      "responsive": true
+    },
+    {
+      "id": "guide-cycle-feminin-hero",
+      "url": "https://www.figma.com/api/mcp/asset/f131e31b-133a-48f7-bcde-799acd9a68da",
+      "outputDir": "public/images/blog",
+      "outputName": "guide-cycle-feminin-hero",
+      "responsive": true
+    },
+    {
+      "id": "guide-cycle-feminin-inline",
+      "url": "https://www.figma.com/api/mcp/asset/f9d0f180-bcb8-4afe-a7cd-336e63e26195",
+      "outputDir": "public/images/blog",
+      "outputName": "guide-cycle-feminin-inline",
+      "responsive": true
+    }
+  ],
+  "authors": [
+    {
+      "id": "julie-leman",
+      "url": "https://www.figma.com/api/mcp/asset/7a8cb724-86e1-4aa1-9311-4b857a901d53",
+      "outputDir": "public/images/authors",
+      "outputName": "julie-leman",
+      "responsive": false
+    },
+    {
+      "id": "marie-v",
+      "url": "https://www.figma.com/api/mcp/asset/a27605af-99bd-4f24-a364-575313a5f252",
+      "outputDir": "public/images/authors",
+      "outputName": "marie-v",
+      "responsive": false
+    },
+    {
+      "id": "claire-b",
+      "url": "https://www.figma.com/api/mcp/asset/797d01c8-83b5-49c1-bdcb-5328a70879c8",
+      "outputDir": "public/images/authors",
+      "outputName": "claire-b",
+      "responsive": false
+    },
+    {
+      "id": "equipe-ellea",
+      "url": "https://www.figma.com/api/mcp/asset/ee86f0dd-5563-4977-8d7e-5bf199badb89",
+      "outputDir": "public/images/authors",
+      "outputName": "equipe-ellea",
+      "responsive": false
+    }
+  ],
+  "icons": [
+    {
+      "id": "moon",
+      "url": "https://www.figma.com/api/mcp/asset/b91b424e-3ce7-42e2-8210-3173ddc4c558",
+      "outputDir": "public/images/icons",
+      "outputName": "moon",
+      "responsive": false
+    },
+    {
+      "id": "sun",
+      "url": "https://www.figma.com/api/mcp/asset/41849c75-41ce-4cd0-a60c-a68a7870e418",
+      "outputDir": "public/images/icons",
+      "outputName": "sun",
+      "responsive": false
+    },
+    {
+      "id": "heart",
+      "url": "https://www.figma.com/api/mcp/asset/acdf2638-e68c-4e1f-99ec-2f6fbfe77f01",
+      "outputDir": "public/images/icons",
+      "outputName": "heart",
+      "responsive": false
+    },
+    {
+      "id": "leaf",
+      "url": "https://www.figma.com/api/mcp/asset/6cae0131-ec68-41a1-907a-f6283f6bdb59",
+      "outputDir": "public/images/icons",
+      "outputName": "leaf",
+      "responsive": false
+    },
+    {
+      "id": "zap",
+      "url": "https://www.figma.com/api/mcp/asset/9244ec1f-f329-46ef-9ab1-1f24e4a167f2",
+      "outputDir": "public/images/icons",
+      "outputName": "zap",
+      "responsive": false
+    },
+    {
+      "id": "smile",
+      "url": "https://www.figma.com/api/mcp/asset/4dbb19a4-2225-4ea0-9639-d02261d3730b",
+      "outputDir": "public/images/icons",
+      "outputName": "smile",
+      "responsive": false
+    },
+    {
+      "id": "mail",
+      "url": "https://www.figma.com/api/mcp/asset/e8f77214-4094-479f-8076-9fd322cb0439",
+      "outputDir": "public/images/icons",
+      "outputName": "mail",
+      "responsive": false
+    },
+    {
+      "id": "chevron-right",
+      "url": "https://www.figma.com/api/mcp/asset/1a226e80-3a0a-46b1-a30a-83f976d2ac66",
+      "outputDir": "public/images/icons",
+      "outputName": "chevron-right",
+      "responsive": false
+    }
+  ]
+}

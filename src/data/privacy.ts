@@ -1,10 +1,10 @@
 export const privacyContent = {
   title: 'Politique de confidentialité',
   metaDescription:
-    'Politique de confidentialité — à personnaliser dans src/data/privacy.ts et faire valider par un conseiller juridique avant publication.',
-  lastUpdated: '[Date]',
-  legalEntity: '[Entité légale, à compléter]',
-  brandName: '[Marque]',
+    'Politique de confidentialité d’Ellea — comment nous recueillons, utilisons et protégeons vos renseignements personnels.',
+  lastUpdated: '9 juillet 2024',
+  legalEntity: 'Ellea Blog Santé',
+  brandName: 'Ellea',
   sections: [
     {
       title: '1. Renseignements que nous recueillons',
@@ -28,7 +28,7 @@ export const privacyContent = {
     {
       title: '3. Partage de vos renseignements',
       paragraphs: [
-        'Nous pouvons partager certains renseignements avec des fournisseurs de services (hébergement, infolettre, analyses). Ces fournisseurs sont tenus de protéger vos renseignements.',
+        'Nous pouvons partager certains renseignements avec des fournisseurs de services (hébergement Vercel, formulaires Formspree pour le contact et la newsletter). Ces fournisseurs sont tenus de protéger vos renseignements.',
       ],
     },
     {
@@ -69,9 +69,9 @@ export const privacyContent = {
     },
   ],
   officer: {
-    name: '[Nom du responsable, à compléter]',
-    email: 'confidentialite@exemple.com',
-    address: '[Adresse postale, à compléter]',
+    name: 'Responsable Ellea',
+    email: 'contact@ellea.fr',
+    address: 'France',
   },
   disclaimer:
     'Ce document est un gabarit conforme à l’esprit de la Loi 25 du Québec. Il doit être validé par un conseiller juridique avant publication et ne constitue pas un avis légal.',

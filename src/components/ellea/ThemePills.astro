@@ -1,0 +1,53 @@
+---
+import type { Theme } from '@/data/themes';
+import { images } from '@/data/images';
+
+interface Props {
+  themes: Theme[];
+  activeSlug?: string;
+  showAll?: boolean;
+  baseHref?: string;
+}
+
+const { themes, activeSlug, showAll = false, baseHref = '/blog/' } = Astro.props;
+---
+<div class="flex flex-wrap items-center justify-center gap-4">
+  {showAll && (
+    <a
+      href={baseHref}
+      class:list={[
+        'inline-flex items-center rounded-full border px-5 py-3 text-[15px] font-medium transition-colors',
+        !activeSlug
+          ? 'border-brand bg-brand text-white'
+          : 'border-border bg-white text-ink hover:border-brand',
+      ]}
+    >
+      Tout
+    </a>
+  )}
+  {themes.map((theme) => {
+    const href = theme.categorySlug ? `${baseHref}?categorie=${theme.categorySlug}` : `${baseHref}?theme=${theme.slug}`;
+    const isActive = activeSlug === theme.slug || activeSlug === theme.categorySlug;
+    return (
+      <a
+        href={href}
+        class:list={[
+          'inline-flex items-center gap-2.5 rounded-full border px-5 py-3 text-[15px] font-medium transition-colors',
+          isActive
+            ? 'border-brand bg-brand text-white'
+            : 'border-border bg-white text-ink hover:border-brand',
+        ]}
+      >
+        <img
+          src={`${images.icons[theme.icon]}.png`}
+          alt=""
+          width="18"
+          height="18"
+          class="size-[18px]"
+          aria-hidden="true"
+        />
+        {theme.label}
+      </a>
+    );
+  })}
+</div>

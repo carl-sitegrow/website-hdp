@@ -1,0 +1,171 @@
+---
+import { contactContent } from '@/data/contact';
+import { siteConfig } from '@/config/site';
+import { images } from '@/data/images';
+import { PUBLIC_FORMSPREE_ID } from 'astro:env/client';
+
+const { form, details } = contactContent;
+const formspreeId = PUBLIC_FORMSPREE_ID?.trim();
+const endpoint = formspreeId ? `https://formspree.io/f/${formspreeId}` : null;
+---
+
+<section class="px-6 py-24 lg:px-[120px]">
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-16 lg:flex-row lg:gap-20">
+    <div class="flex-1">
+      {endpoint ? (
+        <form
+          id="contact-form"
+          class="flex flex-col gap-4"
+          action={endpoint}
+          method="POST"
+          data-endpoint={endpoint}
+          novalidate
+        >
+          <p id="contact-status" role="status" aria-live="polite" class="hidden rounded-lg border px-4 py-3 text-sm"></p>
+          <input type="hidden" name="_subject" value={`Nouveau message : ${siteConfig.siteName}`} />
+          <input type="hidden" name="_captcha" value="false" />
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="mb-2 block text-[13px] font-semibold text-ink" for="contact-firstname">{form.firstName}</label>
+              <input
+                id="contact-firstname"
+                name="prenom"
+                type="text"
+                autocomplete="given-name"
+                required
+                placeholder={form.firstNamePlaceholder}
+                class="contact-field h-12 w-full rounded-xl border border-border bg-white px-4 text-[15px] text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+              />
+            </div>
+            <div>
+              <label class="mb-2 block text-[13px] font-semibold text-ink" for="contact-lastname">{form.lastName}</label>
+              <input
+                id="contact-lastname"
+                name="nom"
+                type="text"
+                autocomplete="family-name"
+                required
+                placeholder={form.lastNamePlaceholder}
+                class="contact-field h-12 w-full rounded-xl border border-border bg-white px-4 text-[15px] text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2 block text-[13px] font-semibold text-ink" for="contact-email">{form.email}</label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              placeholder={form.emailPlaceholder}
+              class="contact-field h-12 w-full rounded-xl border border-border bg-white px-4 text-[15px] text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+            />
+          </div>
+
+          <div>
+            <label class="mb-2 block text-[13px] font-semibold text-ink" for="contact-subject">{form.subject}</label>
+            <input
+              id="contact-subject"
+              name="sujet"
+              type="text"
+              required
+              placeholder={form.subjectPlaceholder}
+              class="contact-field h-12 w-full rounded-xl border border-border bg-white px-4 text-[15px] text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+            />
+          </div>
+
+          <div>
+            <label class="mb-2 block text-[13px] font-semibold text-ink" for="contact-message">{form.message}</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="6"
+              required
+              placeholder={form.messagePlaceholder}
+              class="contact-field w-full resize-y rounded-xl border border-border bg-white px-4 py-4 text-[15px] leading-relaxed text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            id="contact-submit"
+            class="mt-2 flex h-[52px] items-center justify-center rounded-xl bg-brand text-sm font-semibold text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
+          >
+            {form.submit}
+          </button>
+        </form>
+      ) : (
+        <div class="rounded-xl border border-dashed border-brand/40 bg-brand-light p-6">
+          <p class="font-semibold text-ink">{form.notConfiguredTitle}</p>
+          <p class="mt-2 text-sm text-muted">{form.notConfiguredMessage}</p>
+          <a href={`mailto:${siteConfig.contactEmail}`} class="mt-4 inline-flex rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white">
+            {form.fallbackCta}
+          </a>
+        </div>
+      )}
+    </div>
+
+    <aside class="w-full lg:w-[420px]">
+      <div class="rounded-xl border border-border bg-white p-6">
+        <h2 class="font-serif text-2xl font-semibold text-ink">{details.title}</h2>
+        <div class="mt-6 flex items-center gap-3">
+          <img src={`${images.icons.mail}.png`} alt="" width="18" height="18" class="size-[18px]" aria-hidden="true" />
+          <a href={`mailto:${details.email}`} class="text-[15px] text-ink hover:text-brand">{details.email}</a>
+        </div>
+        <div class="mt-6 h-px bg-border" aria-hidden="true"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || form.dataset.init === 'true') return;
+    form.dataset.init = 'true';
+    const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement;
+    const status = document.getElementById('contact-status');
+    const endpoint = form.dataset.endpoint;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!endpoint) return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Envoi…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.reset();
+          if (status) {
+            status.classList.remove('hidden');
+            status.className = 'rounded-lg border border-brand/30 bg-brand-light px-4 py-3 text-sm text-ink';
+            status.textContent = 'Merci ! Votre message a bien été envoyé.';
+          }
+        } else if (status) {
+          status.classList.remove('hidden');
+          status.className = 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700';
+          status.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+        }
+      } catch {
+        if (status) {
+          status.classList.remove('hidden');
+          status.className = 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700';
+          status.textContent = 'Erreur réseau. Vérifiez votre connexion.';
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Envoyer le message';
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initContactForm);
+  else initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>

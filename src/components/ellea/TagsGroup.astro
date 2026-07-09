@@ -1,0 +1,31 @@
+---
+const tagCategoryMap: Record<string, string> = {
+  Nutrition: 'nutrition',
+  Hormones: 'bien-etre',
+  'Cycle Féminin': 'corps',
+  'Bien-être': 'bien-etre',
+  Alimentation: 'nutrition',
+  Mental: 'mental',
+  Sport: 'corps',
+  Sommeil: 'bien-etre',
+  Méditation: 'mental',
+};
+
+interface Props {
+  tags: string[];
+}
+const { tags } = Astro.props;
+---
+<div class="flex flex-wrap gap-3 pt-5">
+  {tags.map((tag) => {
+    const category = tagCategoryMap[tag] ?? tag.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return (
+      <a
+        href={`/blog/?categorie=${category}`}
+        class="rounded-full border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-brand"
+      >
+        {tag}
+      </a>
+    );
+  })}
+</div>

@@ -3,33 +3,26 @@ import '@/styles/global.css';
 import FaviconHead from '@components/FaviconHead.astro';
 import SeoHead from '@components/SeoHead.astro';
 import Breadcrumb from '@components/Breadcrumb.astro';
+import ElleaNavbar from '@components/ellea/ElleaNavbar.astro';
+import ElleaFooter from '@components/ellea/ElleaFooter.astro';
+import NewsletterSection from '@components/ellea/NewsletterSection.astro';
 import type { BreadcrumbItem } from '@/lib/breadcrumb';
 import { DEFAULT_ROBOTS } from '@/lib/seo';
-import { siteConfig } from '@/config/site';
-import HomeNavigation from '@components/home/HomeNavigation.astro';
-import HomeFooter from '@components/home/HomeFooter.astro';
 
 interface Props {
   title: string;
   description?: string;
   lang?: string;
   robots?: string;
-  /** Image OG/canonique (chemin relatif type /images/blog/slug.webp) */
   image?: string;
-  /** Texte alternatif de l'image OG (défaut = titre). */
   imageAlt?: string;
-  /** Type OG — 'article' pour les posts, 'website' par défaut */
   type?: 'website' | 'article';
-  /** URL AMP à déclarer via <link rel="amphtml"> (posts FR uniquement) */
   ampUrl?: string;
-  /** Fil d'Ariane (passé directement au composant Breadcrumb) */
   breadcrumbs?: BreadcrumbItem[] | null;
-  /** Afficher la navigation principale (default true) */
   showNav?: boolean;
-  /** Afficher le fil d'Ariane (default true si breadcrumbs fournis) */
   showBreadcrumb?: boolean;
-  /** Afficher le footer (default true) */
   showFooter?: boolean;
+  showNewsletter?: boolean;
 }
 
 const {
@@ -43,32 +36,24 @@ const {
   ampUrl,
   breadcrumbs,
   showNav = true,
-  showBreadcrumb = true,
+  showBreadcrumb = false,
   showFooter = true,
+  showNewsletter = true,
 } = Astro.props;
 
 const renderBreadcrumb = showBreadcrumb && breadcrumbs && breadcrumbs.length > 0;
-const isEnPage = lang.startsWith('en');
-const navLang = isEnPage ? 'en' : 'fr';
-// Robots : directive best-practice par défaut (indexable + aperçus riches).
-// Les pages /en/ restent `noindex` tant que enIndexable = false (contenu non traduit).
-// Passer explicitement la prop `robots` sur une page pour forcer une valeur.
-const defaultRobots =
-  isEnPage && !siteConfig.enIndexable ? 'noindex, follow' : DEFAULT_ROBOTS;
-const robotsContent = robots ?? defaultRobots;
-const skipLabel = isEnPage ? 'Skip to main content' : 'Aller au contenu principal';
+const robotsContent = robots ?? DEFAULT_ROBOTS;
 ---
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="preload"
-      href="/fonts/inter-latin-var.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
     />
     {description && <meta name="description" content={description} />}
     <meta name="robots" content={robotsContent} />
@@ -77,18 +62,20 @@ const skipLabel = isEnPage ? 'Skip to main content' : 'Aller au contenu principa
     {ampUrl && <link rel="amphtml" href={ampUrl} />}
     <FaviconHead />
   </head>
-  <body class="bg-white text-ink font-sans antialiased">
+  <body class="bg-bg font-sans text-ink antialiased">
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-white"
     >
-      {skipLabel}
+      Aller au contenu principal
     </a>
-    {showNav && <HomeNavigation lang={navLang} />}
+    {showNav && <ElleaNavbar />}
     {renderBreadcrumb && <Breadcrumb items={breadcrumbs} />}
     <div id="main-content">
+      <slot name="before-main" />
       <slot />
+      {showNewsletter && <NewsletterSection />}
     </div>
-    {showFooter && <HomeFooter />}
+    {showFooter && <ElleaFooter />}
   </body>
 </html>

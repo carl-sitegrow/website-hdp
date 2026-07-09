@@ -1,0 +1,66 @@
+---
+import type { Post } from '@/data/posts';
+import { getPostHref, formatPostDateShort, postUi } from '@/data/posts';
+import ResponsiveImage from '@components/ResponsiveImage.astro';
+
+interface Props {
+  post: Post;
+  variant?: 'featured' | 'compact' | 'related';
+}
+
+const { post, variant = 'compact' } = Astro.props;
+const href = getPostHref(post);
+const imageHeights = { featured: 400, compact: 260, related: 320 } as const;
+const imageHeight = imageHeights[variant];
+---
+<a href={href} class="group flex flex-col gap-5">
+  <ResponsiveImage
+    src={post.image}
+    alt={post.imageAlt}
+    width={800}
+    height={imageHeight}
+    sizes="(min-width: 1024px) 33vw, 100vw"
+    class="w-full rounded-xl object-cover"
+    style={`aspect-ratio: auto; height: ${imageHeight}px;`}
+  />
+  <div class="flex flex-col gap-3">
+    <div class="flex items-center justify-between gap-3">
+      <span class="rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold uppercase text-brand">
+        {post.category}
+      </span>
+      {variant === 'compact' && (
+        <span class="text-xs font-medium text-muted">
+          {post.readingTime} {postUi.readTime}
+        </span>
+      )}
+    </div>
+    <h3
+      class:list={[
+        'font-serif font-semibold leading-snug text-ink transition-colors group-hover:text-brand',
+        variant === 'featured' ? 'text-[28px]' : variant === 'related' ? 'text-2xl' : 'text-xl',
+      ]}
+    >
+      {post.title}
+    </h3>
+    {(variant === 'featured' || variant === 'related') && (
+      <p class="line-clamp-3 text-[15px] leading-relaxed text-muted">{post.summary}</p>
+    )}
+    <div class="flex items-center gap-2.5 pt-1">
+      <picture>
+        <source srcset={`${post.author.image}.avif`} type="image/avif" />
+        <source srcset={`${post.author.image}.webp`} type="image/webp" />
+        <img
+          src={`${post.author.image}.webp`}
+          alt=""
+          width="24"
+          height="24"
+          class="size-6 rounded-full object-cover"
+          loading="lazy"
+        />
+      </picture>
+      <span class="text-[13px] font-medium text-ink">{post.author.name}</span>
+      <span class="size-[3px] rounded-full bg-border" aria-hidden="true"></span>
+      <span class="text-[13px] text-muted">{formatPostDateShort(post.date)}</span>
+    </div>
+  </div>
+</a>

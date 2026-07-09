@@ -1,22 +1,82 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
-import HomeHero from '@components/home/HomeHero.astro';
-import HomeFeaturesSection from '@components/home/HomeFeaturesSection.astro';
 import JsonLd from '@components/JsonLd.astro';
+import ResponsiveImage from '@components/ResponsiveImage.astro';
+import ThemePills from '@components/ellea/ThemePills.astro';
+import SectionHeading from '@components/ellea/SectionHeading.astro';
+import ArticleCard from '@components/ellea/ArticleCard.astro';
 import { buildHomeGraph } from '@/lib/schema';
 import { siteConfig } from '@/config/site';
+import { homeContent } from '@/data/home';
+import { themes } from '@/data/themes';
+import { getPostsBySlugs, getRecentPostsExcluding } from '@/data/posts';
 
 const origin = Astro.site ?? new URL(Astro.url.origin);
 const homeGraph = buildHomeGraph(origin, { lang: 'fr-CA' });
+
+const featuredPosts = getPostsBySlugs([...homeContent.featuredSlugs]);
+const recentPosts = getRecentPostsExcluding(homeContent.featuredSlugs, 9);
 ---
 <PageLayout
-  title={`${siteConfig.siteName} | ${siteConfig.city}, ${siteConfig.region}`}
+  title={`${siteConfig.siteName} | Blog santé et bien-être féminin`}
   description={siteConfig.defaultDescription}
+  image="/images/og-default.webp"
   showBreadcrumb={false}
 >
   <JsonLd schema={homeGraph} />
   <main>
-    <HomeHero />
-    <HomeFeaturesSection />
+    <section class="relative flex flex-col items-center px-6 py-24 text-center lg:px-[120px] lg:py-[120px]">
+      <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <ResponsiveImage
+          src={homeContent.hero.image}
+          alt=""
+          width={1536}
+          height={672}
+          sizes="100vw"
+          class="size-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="absolute inset-0 bg-bg/85"></div>
+      </div>
+      <div class="relative z-10 max-w-[800px]">
+        <h1 class="font-serif text-5xl font-bold leading-tight text-ink md:text-6xl">
+          {homeContent.hero.title}
+        </h1>
+        <p class="mt-5 text-xl leading-relaxed text-muted">{homeContent.hero.subtitle}</p>
+      </div>
+    </section>
+
+    <section class="px-6 py-16 lg:px-[120px]">
+      <h2 class="mb-8 text-center font-serif text-2xl font-semibold text-ink">{homeContent.themesTitle}</h2>
+      <ThemePills themes={themes} baseHref="/blog/" />
+    </section>
+
+    <section class="px-6 py-16 lg:px-[120px]">
+      <div class="mx-auto max-w-[1200px]">
+        <div class="mb-12 flex items-end justify-between">
+          <SectionHeading title={homeContent.featuredTitle} />
+          <a href={homeContent.featuredLink.href} class="text-[15px] font-semibold text-brand underline">
+            {homeContent.featuredLink.label}
+          </a>
+        </div>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {featuredPosts.map((post) => (
+            <ArticleCard post={post} variant="featured" />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 py-16 lg:px-[120px]">
+      <div class="mx-auto max-w-[1200px]">
+        <SectionHeading title={homeContent.recentTitle} class="mb-12" />
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {recentPosts.map((post) => (
+            <ArticleCard post={post} variant="compact" />
+          ))}
+        </div>
+      </div>
+    </section>
   </main>
 </PageLayout>

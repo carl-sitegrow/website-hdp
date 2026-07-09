@@ -1,0 +1,135 @@
+---
+import { siteConfig } from '@/config/site';
+
+const { nav, navCta } = siteConfig;
+---
+<header class="sticky top-0 z-50 border-b border-border bg-bg/95 backdrop-blur-md">
+  <div class="relative z-[110] mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-6 py-6 lg:px-[120px]">
+    <a href="/" class="font-serif text-[32px] font-bold text-brand">Ellea</a>
+
+    <nav class="hidden items-center gap-10 md:flex" aria-label="Navigation principale">
+      {nav.map((link) => (
+        <a href={link.href} class="text-[15px] font-medium text-ink transition-colors hover:text-brand">
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={navCta.href}
+        class="hidden rounded-lg bg-brand px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover md:inline-flex"
+      >
+        {navCta.label}
+      </a>
+
+      <button
+        type="button"
+        id="ellea-mobile-menu-btn"
+        class="relative flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+        aria-controls="ellea-mobile-menu"
+      >
+        <span class="ellea-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+        <span class="ellea-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+        <span class="ellea-menu-line block h-0.5 w-5 bg-ink transition-all"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div
+  id="ellea-mobile-menu"
+  class="fixed inset-0 z-[100] hidden flex-col items-center justify-center gap-8 bg-bg/95 px-6 opacity-0 backdrop-blur-lg transition-opacity duration-300 md:hidden"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation mobile"
+>
+  <button
+    type="button"
+    id="ellea-mobile-menu-close"
+    class="absolute right-6 top-6 flex h-10 w-10 items-center justify-center text-ink"
+    aria-label="Fermer le menu"
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <nav class="flex flex-col items-center gap-6">
+    {nav.map((link) => (
+      <a href={link.href} class="text-xl font-semibold text-ink">{link.label}</a>
+    ))}
+  </nav>
+  <a href={navCta.href} class="rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white">
+    {navCta.label}
+  </a>
+</div>
+
+<style>
+  #ellea-mobile-menu-btn[aria-expanded='true'] .ellea-menu-line:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+  #ellea-mobile-menu-btn[aria-expanded='true'] .ellea-menu-line:nth-child(2) {
+    opacity: 0;
+  }
+  #ellea-mobile-menu-btn[aria-expanded='true'] .ellea-menu-line:nth-child(3) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  function initElleaMobileMenu() {
+    const btnEl = document.getElementById('ellea-mobile-menu-btn');
+    const menuEl = document.getElementById('ellea-mobile-menu');
+    if (!btnEl || !menuEl) return;
+    const btn = btnEl;
+    const menu = menuEl;
+    if (btn.dataset.menuInit === 'true') return;
+    btn.dataset.menuInit = 'true';
+
+    const openLabel = btn.getAttribute('aria-label') ?? 'Ouvrir le menu';
+    const closeLabel = document.getElementById('ellea-mobile-menu-close')?.getAttribute('aria-label') ?? 'Fermer le menu';
+
+    function closeMenu() {
+      menu.classList.remove('opacity-100', 'pointer-events-auto');
+      menu.classList.add('opacity-0', 'pointer-events-none');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', openLabel);
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+      const onEnd = () => {
+        if (menu.classList.contains('opacity-0')) {
+          menu.classList.remove('flex');
+          menu.classList.add('hidden');
+        }
+      };
+      menu.addEventListener('transitionend', onEnd, { once: true });
+    }
+
+    function openMenu() {
+      menu.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      menu.classList.add('flex', 'pointer-events-auto');
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-label', closeLabel);
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      requestAnimationFrame(() => menu.classList.add('opacity-100'));
+    }
+
+    btn.onclick = () => {
+      if (btn.getAttribute('aria-expanded') === 'true') closeMenu();
+      else openMenu();
+    };
+    document.getElementById('ellea-mobile-menu-close')!.onclick = () => closeMenu();
+    menu.querySelectorAll('a').forEach((link) => { link.onclick = () => closeMenu(); });
+    document.onkeydown = (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') closeMenu();
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initElleaMobileMenu);
+  else initElleaMobileMenu();
+  document.addEventListener('astro:page-load', initElleaMobileMenu);
+</script>

@@ -1,74 +1,66 @@
 @import 'tailwindcss';
 
-/**
- * Tailwind v4 — design tokens.
- * Les anciens `theme.extend.colors` et `fontFamily` de tailwind.config.mjs
- * sont désormais des variables CSS définies dans @theme.
- * Usage : `bg-brand`, `text-ink`, `text-muted`, `font-sans`, etc.
- */
 @theme {
-  /* Fonts */
-  --font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
 
-  /* Brand */
-  --color-brand: #8a5cf6;
-  --color-brand-hover: #7c4fe0;
-  --color-brand-light: rgba(138, 92, 246, 0.1);
-  --color-brand-dark: #111111;
+  --color-brand: #c1735b;
+  --color-brand-hover: #a85f4a;
+  --color-brand-light: #f9ebea;
+  --color-brand-dark: #2d2424;
 
-  /* Neutrals */
-  --color-bg: #ffffff;
-  --color-bg-card: #f9fafb;
-  --color-bg-alt: #f2f2f4;
-  --color-surface: #f2f2f4;
-  --color-ink: #1b1b1f;
-  --color-muted: #6b7280;
-  --color-muted-light: #e4e4e7;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-accent: rgba(138, 92, 246, 0.1);
+  --color-bg: #fdfcfb;
+  --color-bg-card: #ffffff;
+  --color-bg-alt: #f9ebea;
+  --color-surface: #f9ebea;
+  --color-ink: #2d2424;
+  --color-muted: #665d5d;
+  --color-muted-light: #eaded9;
+  --color-border: #eaded9;
+  --color-accent: #f9ebea;
 }
 
-/**
- * Inter Variable auto-hébergé (remplace l'import @fontsource) pour permettre
- * un <link rel="preload"> ciblé sur le sous-ensemble latin (LCP texte).
- * unicode-range repris de @fontsource-variable/inter — le sous-ensemble latin
- * couvre déjà le français (accents + œ, U+0152-0153).
- */
-@font-face {
-  font-family: 'Inter Variable';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('/fonts/inter-latin-var.woff2') format('woff2-variations');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Inter Variable';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('/fonts/inter-latin-ext-var.woff2') format('woff2-variations');
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
-}
-
-/* Polices / base */
 html {
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  background-color: var(--color-bg);
 }
 
-/* Polish prose-style for privacy / long-form content */
 .prose-policy h2 {
   margin-top: 3rem;
   margin-bottom: 1rem;
   font-weight: 700;
   color: var(--color-ink);
+}
+
+.prose-article p {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+}
+
+.prose-article p + p {
+  margin-top: 1.5rem;
+}
+
+.prose-article h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose-article .drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  line-height: 0.8;
+  font-weight: 700;
+  color: var(--color-brand);
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
 }

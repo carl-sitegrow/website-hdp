@@ -1,32 +1,20 @@
+import { images } from '@/data/images';
+
 export const homeContent = {
   hero: {
-    eyebrow: 'À propos de nous',
-    title: ['Titre principal du hero.', 'Une seconde ligne pour l’impact.'],
+    title: "Prenez soin de vous, de l'intérieur",
     subtitle:
-      'Sous-titre du hero — remplacez ce texte par un résumé clair de votre proposition de valeur dans src/data/home.ts.',
-    primaryCta: { label: 'Appel à l’action principal', href: '/contact/' },
-    secondaryCta: { label: 'Voir nos services', href: '/services/' },
+      'Découvrez des conseils experts pour une santé équilibrée, des astuces bien-être et des partages inspirants pour chaque étape de votre vie.',
+    image: images.heroHome,
+    imageAlt: 'Ambiance douce et apaisante pour le bien-être féminin',
   },
-  features: {
-    eyebrow: 'Nos avantages',
-    title: 'Pourquoi nous choisir',
-    subtitle:
-      'Quelques arguments clés qui distinguent votre entreprise — modifiables dans src/data/home.ts.',
-    items: [
-      {
-        title: 'Avantage 1',
-        description:
-          'Décrivez un premier avantage concret pour vos clients (qualité, rapidité, expertise locale…).',
-      },
-      {
-        title: 'Avantage 2',
-        description:
-          'Décrivez un second avantage distinctif (service sur mesure, accompagnement, etc.).',
-      },
-      {
-        title: 'Avantage 3',
-        description: 'Décrivez un troisième avantage pertinent pour votre marché cible.',
-      },
-    ],
-  },
+  themesTitle: 'Explorer par thème',
+  featuredTitle: 'Articles à la une',
+  featuredLink: { label: 'Voir tout', href: '/blog/' },
+  recentTitle: 'Articles récents',
+    featuredSlugs: [
+    'guide-alimentaire-cycle-feminin',
+    'rituel-matin-journee-sereine',
+    'granola-maison-sans-sucre',
+  ],
 } as const;

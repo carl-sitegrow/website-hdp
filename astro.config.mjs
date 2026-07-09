@@ -63,6 +63,11 @@ export default defineConfig({
         access: 'public',
         optional: true,
       }),
+      PUBLIC_NEWSLETTER_FORMSPREE_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
       // Variables serveur publiques (pas de secret, mais inutiles côté client)
       SITE_URL: envField.string({
         context: 'server',

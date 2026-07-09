@@ -1,0 +1,12 @@
+---
+interface Props {
+  title: string;
+  showBar?: boolean;
+  class?: string;
+}
+const { title, showBar = true, class: className } = Astro.props;
+---
+<div class:list={['flex flex-col gap-3', className]}>
+  <h2 class="font-serif text-4xl font-semibold text-ink">{title}</h2>
+  {showBar && <div class="h-[3px] w-[60px] rounded-sm bg-brand" aria-hidden="true"></div>}
+</div>

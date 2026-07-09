@@ -1,0 +1,97 @@
+---
+import { newsletterContent } from '@/data/contact';
+import { siteConfig } from '@/config/site';
+import { PUBLIC_FORMSPREE_ID, PUBLIC_NEWSLETTER_FORMSPREE_ID } from 'astro:env/client';
+
+const formspreeId = (PUBLIC_NEWSLETTER_FORMSPREE_ID ?? PUBLIC_FORMSPREE_ID)?.trim();
+const endpoint = formspreeId ? `https://formspree.io/f/${formspreeId}` : null;
+---
+<section id="newsletter" class="bg-brand-light px-6 py-20 lg:px-[120px]">
+  <div class="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-10 lg:flex-row lg:items-center">
+    <div class="max-w-[500px]">
+      <h2 class="font-serif text-5xl font-bold leading-tight text-ink">{newsletterContent.title}</h2>
+      <p class="mt-4 text-lg leading-relaxed text-muted">{newsletterContent.subtitle}</p>
+    </div>
+
+    {endpoint ? (
+      <form
+        id="newsletter-form"
+        class="flex w-full max-w-[500px] flex-col gap-3 sm:flex-row sm:items-center"
+        action={endpoint}
+        method="POST"
+        data-endpoint={endpoint}
+      >
+        <input type="hidden" name="_subject" value={`Newsletter : ${siteConfig.siteName}`} />
+        <input type="hidden" name="_captcha" value="false" />
+        <label class="sr-only" for="newsletter-email">Courriel</label>
+        <input
+          id="newsletter-email"
+          name="email"
+          type="email"
+          required
+          placeholder={newsletterContent.emailPlaceholder}
+          class="h-[52px] flex-1 rounded-lg border border-border bg-white px-5 text-base text-ink placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+        />
+        <button
+          type="submit"
+          id="newsletter-submit"
+          class="h-[45px] shrink-0 rounded-lg bg-brand px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
+        >
+          {newsletterContent.submit}
+        </button>
+        <p id="newsletter-status" class="sr-only w-full text-sm" role="status" aria-live="polite"></p>
+      </form>
+    ) : (
+      <p class="text-sm text-muted">Configurez PUBLIC_NEWSLETTER_FORMSPREE_ID pour activer l'inscription.</p>
+    )}
+  </div>
+</section>
+
+<script>
+  function initNewsletterForm() {
+    const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+    if (!form || form.dataset.init === 'true') return;
+    form.dataset.init = 'true';
+    const submitBtn = document.getElementById('newsletter-submit') as HTMLButtonElement;
+    const status = document.getElementById('newsletter-status');
+    const endpoint = form.dataset.endpoint;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!endpoint) return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Inscription…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.reset();
+          if (status) {
+            status.classList.remove('sr-only');
+            status.textContent = 'Merci ! Vous êtes inscrite à notre newsletter.';
+            status.className = 'w-full text-sm text-brand font-medium';
+          }
+        } else if (status) {
+          status.classList.remove('sr-only');
+          status.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+          status.className = 'w-full text-sm text-red-600';
+        }
+      } catch {
+        if (status) {
+          status.classList.remove('sr-only');
+          status.textContent = 'Erreur réseau. Vérifiez votre connexion.';
+          status.className = 'w-full text-sm text-red-600';
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "S'inscrire";
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initNewsletterForm);
+  else initNewsletterForm();
+  document.addEventListener('astro:page-load', initNewsletterForm);
+</script>

@@ -1,0 +1,38 @@
+---
+import type { Post } from '@/data/posts';
+import { formatPostDate, postUi } from '@/data/posts';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+---
+<section class="px-6 pb-12 pt-20 text-center lg:px-[120px]">
+  <div class="mx-auto max-w-[900px]">
+    <div class="flex items-center justify-center gap-3">
+      <span class="rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold uppercase text-brand">
+        {post.category}
+      </span>
+      <span class="size-[3px] rounded-full bg-border" aria-hidden="true"></span>
+      <span class="text-sm text-muted">{post.readingTime} {postUi.readTime} de lecture</span>
+    </div>
+    <h1 class="mt-8 font-serif text-4xl font-bold leading-tight text-ink md:text-[56px]">{post.title}</h1>
+    <div class="mt-8 flex items-center justify-center gap-4">
+      <picture>
+        <source srcset={`${post.author.image}.avif`} type="image/avif" />
+        <source srcset={`${post.author.image}.webp`} type="image/webp" />
+        <img
+          src={`${post.author.image}.webp`}
+          alt={post.author.name}
+          width="40"
+          height="40"
+          class="size-10 rounded-full object-cover"
+        />
+      </picture>
+      <div class="text-left">
+        <p class="text-[15px] font-semibold text-ink">{post.author.name}</p>
+        <p class="text-[13px] text-muted">Publié le {formatPostDate(post.date)}</p>
+      </div>
+    </div>
+  </div>
+</section>

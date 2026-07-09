@@ -1,49 +1,22 @@
 /**
- * Configuration maîtresse du site.
- * À personnaliser pour chaque projet (voir README.md).
+ * Configuration maîtresse du site Ellea.
  */
 export type BusinessType = 'Organization' | 'LocalBusiness' | 'WebSite';
 
 export const siteConfig = {
-  /** Nom commercial affiché dans le header, footer, SEO, etc. */
-  siteName: 'Sitegrow Skeleton',
-  /** Ville principale (utilisée dans le footer, le SEO local, les JSON-LD). */
-  city: 'Ville',
-  /** Région / province / État (ex. « Québec », « Île-de-France »). */
-  region: 'Région',
-  /** Domaine canonique sans protocol ni slash final (ex. « exemple.com »). */
-  domain: 'exemple.com',
-  /** URL canonique complète, sans slash final (ex. « https://exemple.com »). */
-  url: 'https://exemple.com',
-  /** Description par défaut utilisée en SEO quand aucune description n’est fournie. */
-  defaultDescription: 'Description par défaut du site — à remplacer dans src/config/site.ts.',
-  /**
-   * Le miroir anglais (/en/) est-il réellement traduit et prêt à être indexé ?
-   * `false` (défaut sûr) : les pages /en/ sont `noindex`, exclues du hreflang et
-   * du sitemap — évite d'indexer du contenu FR sous des URLs EN (duplication).
-   * Passer à `true` UNIQUEMENT une fois src/data/* traduit en anglais.
-   */
+  siteName: 'Ellea',
+  city: 'Paris',
+  region: 'France',
+  domain: 'ellea.fr',
+  url: 'https://ellea.fr',
+  defaultDescription:
+    'Découvrez des conseils experts pour une santé équilibrée, des astuces bien-être et des partages inspirants pour chaque étape de votre vie.',
   enIndexable: false,
-  /** Courriel de contact public. */
-  contactEmail: 'info@exemple.com',
-  /** Téléphone format affichage (optionnel). */
+  contactEmail: 'contact@ellea.fr',
   phone: '',
-  /**
-   * Logo de la marque (chemin depuis /public, avec extension) utilisé comme
-   * publisher.logo dans les JSON-LD. Vide = repli sur l'image OG par défaut.
-   * Idéalement un PNG carré ≥ 112 px. Ex. '/images/logo/logo.png'.
-   */
   logo: '',
-  /** Handle X/Twitter avec @ (ex. '@marque') pour les Twitter Cards. Vide = masqué. */
   twitterHandle: '',
-  /**
-   * Autoriser les crawlers IA / moteurs génératifs (GPTBot, ClaudeBot,
-   * PerplexityBot, Google-Extended…) dans robots.txt.
-   * `true` (défaut) = visibilité maximale dans les réponses IA (GEO).
-   * `false` = bloque explicitement ces robots (Disallow: /).
-   */
   allowAiCrawlers: true,
-  /** Adresse postale structurée (optionnel — déclenche le schema LocalBusiness). */
   address: {
     street: '',
     city: '',
@@ -51,17 +24,9 @@ export const siteConfig = {
     postalCode: '',
     country: '',
   },
-  /**
-   * Type d'entité pour le JSON-LD sur la home.
-   * - 'Organization' (défaut) : entreprise sans adresse physique
-   * - 'LocalBusiness' : commerce/local avec adresse + heures (SEO local)
-   */
   businessType: 'Organization' as BusinessType,
-  /** Heures d'ouverture (schema LocalBusiness). Tableau vide = masqué. */
   openingHours: [] as string[],
-  /** Coordonnées géographiques (schema LocalBusiness). */
   geo: undefined as { lat: number; lng: number } | undefined,
-  /** Liens vers les réseaux sociaux (vide = masqué). */
   social: {
     instagram: '',
     facebook: '',
@@ -69,27 +34,30 @@ export const siteConfig = {
     youtube: '',
     x: '',
   },
-  /** Navigation principale (header). */
   nav: [
-    { label: 'Services', href: '/services/' },
-    { label: 'Blog', href: '/blog/' },
-    { label: 'À propos', href: '/a-propos/' },
-    { label: 'Contact', href: '/contact/' },
+    { label: 'Bien-être', href: '/blog/?categorie=bien-etre' },
+    { label: 'Corps', href: '/blog/?categorie=corps' },
+    { label: 'Mental', href: '/blog/?categorie=mental' },
+    { label: 'Nutrition', href: '/blog/?categorie=nutrition' },
   ],
-  /** Appel à l’action principal du header. */
-  navCta: { label: 'Nous joindre', href: '/contact/' },
-  /** Pied de page. */
+  navCta: { label: 'Newsletter', href: '#newsletter' },
   footer: {
-    tagline: 'Tagline du site — à remplacer dans src/config/site.ts.',
+    tagline:
+      'Un espace dédié à la santé et au bien-être féminin. Parce que prendre soin de soi est le plus beau des engagements.',
     columns: [
       {
-        title: 'Navigation',
+        title: 'Explorer',
         links: [
-          { label: 'Services', href: '/services/' },
-          { label: 'Blog', href: '/blog/' },
-          { label: 'À propos', href: '/a-propos/' },
-          { label: 'Contact', href: '/contact/' },
+          { label: 'Bien-être', href: '/blog/?categorie=bien-etre' },
+          { label: 'Corps', href: '/blog/?categorie=corps' },
+          { label: 'Mental', href: '/blog/?categorie=mental' },
+          { label: 'Nutrition', href: '/blog/?categorie=nutrition' },
+          { label: 'Cycle', href: '/blog/?categorie=corps' },
         ],
+      },
+      {
+        title: 'Ellea',
+        links: [{ label: 'Contact', href: '/contact/' }],
       },
     ],
     legal: {

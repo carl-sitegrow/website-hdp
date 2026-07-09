@@ -1,0 +1,71 @@
+---
+import type { Post } from '@/data/posts';
+import ResponsiveImage from '@components/ResponsiveImage.astro';
+import PullQuote from '@components/ellea/PullQuote.astro';
+import TagsGroup from '@components/ellea/TagsGroup.astro';
+import AuthorBox from '@components/ellea/AuthorBox.astro';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+---
+<section class="px-6 lg:px-[120px]">
+  <div class="mx-auto max-w-[1200px]">
+    <ResponsiveImage
+      src={post.image}
+      alt={post.imageAlt}
+      width={1200}
+      height={720}
+      sizes="(min-width: 1024px) 1200px, 100vw"
+      class="w-full rounded-2xl object-cover"
+      style="height: min(720px, 60vw);"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+</section>
+
+<section class="px-6 py-20 lg:px-[120px]">
+  <article class="prose-article mx-auto max-w-[800px]">
+    {
+      post.sections.map((section, index) => (
+        <>
+          <div class:list={[index === 0 && 'drop-cap']}>
+            {section.heading && <h2>{section.heading}</h2>}
+            {section.paragraphs.map((p) => (
+              <p>{p}</p>
+            ))}
+            {section.image && (
+              <figure class="my-10">
+                <ResponsiveImage
+                  src={section.image}
+                  alt={section.imageAlt ?? ''}
+                  width={800}
+                  height={500}
+                  sizes="(min-width: 1024px) 800px, 100vw"
+                  class="w-full rounded-xl object-cover"
+                />
+                {section.imageCaption && (
+                  <figcaption class="mt-4 text-center text-sm italic text-muted">
+                    {section.imageCaption}
+                  </figcaption>
+                )}
+              </figure>
+            )}
+          </div>
+          {post.pullQuote && index === 1 && !section.heading && (
+            <PullQuote text={post.pullQuote.text} />
+          )}
+        </>
+      ))
+    }
+
+    {post.tags && <TagsGroup tags={post.tags} />}
+    {post.author.bio && (
+      <div class="mt-12">
+        <AuthorBox author={post.author} />
+      </div>
+    )}
+  </article>
+</section>

@@ -29,3 +29,6 @@ pnpm-debug.log*
 *~
 # Vercel (état de liaison local + artefacts)
 .vercel
+
+# Cache temporaire téléchargement Figma
+scripts/.figma-cache/

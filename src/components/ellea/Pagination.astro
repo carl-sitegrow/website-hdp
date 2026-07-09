@@ -1,0 +1,54 @@
+---
+import { images } from '@/data/images';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+}
+
+const { currentPage, totalPages, basePath = '/blog' } = Astro.props;
+
+function pageHref(page: number) {
+  if (page === 1) return `${basePath}/`;
+  return `${basePath}/page/${page}/`;
+}
+
+const pages: (number | 'ellipsis')[] = [];
+if (totalPages <= 6) {
+  for (let i = 1; i <= totalPages; i++) pages.push(i);
+} else {
+  pages.push(1, 2, 3, 4, 'ellipsis', totalPages);
+}
+---
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center gap-3 pt-16" aria-label="Pagination">
+    {pages.map((page) =>
+      page === 'ellipsis' ? (
+        <span class="flex size-11 items-center justify-center text-muted">…</span>
+      ) : (
+        <a
+          href={pageHref(page)}
+          class:list={[
+            'flex size-11 items-center justify-center rounded-lg text-[15px] font-medium transition-colors',
+            page === currentPage
+              ? 'bg-brand text-white'
+              : 'border border-border bg-white text-ink hover:border-brand',
+          ]}
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
+          {page}
+        </a>
+      ),
+    )}
+    {currentPage < totalPages && (
+      <a
+        href={pageHref(currentPage + 1)}
+        class="inline-flex items-center gap-2 rounded-full border border-border bg-white px-5 py-3 text-[15px] font-medium text-ink transition-colors hover:border-brand"
+      >
+        Suivant
+        <img src={`${images.icons.chevronRight}.png`} alt="" width="16" height="16" class="size-4" aria-hidden="true" />
+      </a>
+    )}
+  </nav>
+)}

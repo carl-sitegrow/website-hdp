@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from 'astro';
+import PageLayout from '@layouts/PageLayout.astro';
+import ThemePills from '@components/ellea/ThemePills.astro';
+import ArticleCard from '@components/ellea/ArticleCard.astro';
+import Pagination from '@components/ellea/Pagination.astro';
+import { siteConfig } from '@/config/site';
+import { blogFilterThemes } from '@/data/themes';
+import { getPublishedPosts, postUi, POSTS_PER_PAGE } from '@/data/posts';
+
+export const getStaticPaths: GetStaticPaths = () => {
+  const allPosts = getPublishedPosts();
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+  if (totalPages <= 1) return [];
+
+  return Array.from({ length: totalPages - 1 }, (_, i) => {
+    const page = i + 2;
+    const start = (page - 1) * POSTS_PER_PAGE;
+    return {
+      params: { page: String(page) },
+      props: { posts: allPosts.slice(start, start + POSTS_PER_PAGE), currentPage: page, totalPages },
+    };
+  });
+};
+
+const { posts, currentPage, totalPages } = Astro.props;
+---
+<PageLayout
+  title={`${postUi.listTitle} — page ${currentPage} | ${siteConfig.siteName}`}
+  description={postUi.listSubtitle}
+  showBreadcrumb={false}
+>
+  <main>
+    <section class="px-6 py-20 text-center lg:px-[120px]">
+      <h1 class="font-serif text-5xl font-bold text-ink">{postUi.listTitle}</h1>
+      <p class="mx-auto mt-5 max-w-[600px] text-xl text-muted">{postUi.listSubtitle}</p>
+    </section>
+
+    <section class="border-y border-border px-6 py-10 lg:px-[120px]">
+      <ThemePills themes={blogFilterThemes} showAll baseHref="/blog/" />
+    </section>
+
+    <section class="px-6 py-16 lg:px-[120px]">
+      <div class="mx-auto max-w-[1200px]">
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <ArticleCard post={post} variant="compact" />
+          ))}
+        </div>
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
+      </div>
+    </section>
+  </main>
+</PageLayout>

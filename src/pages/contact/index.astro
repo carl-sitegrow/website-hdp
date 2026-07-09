@@ -1,16 +1,37 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
-import ContactSection from '@components/ContactSection.astro';
+import ResponsiveImage from '@components/ResponsiveImage.astro';
+import ElleaContactSection from '@components/ellea/ElleaContactSection.astro';
 import { siteConfig } from '@/config/site';
 import { contactContent } from '@/data/contact';
+import { images } from '@/data/images';
 import { breadcrumbTrails } from '@/lib/breadcrumb';
 ---
 <PageLayout
-  title={`${contactContent.title} | ${siteConfig.siteName}`}
-  description={contactContent.subtitle}
+  title={`${contactContent.hero.title} | ${siteConfig.siteName}`}
+  description={contactContent.hero.subtitle}
   breadcrumbs={breadcrumbTrails.contact('fr')}
+  showBreadcrumb={false}
 >
   <main>
-    <ContactSection />
+    <section class="relative flex flex-col items-center px-6 py-24 text-center lg:px-[120px]">
+      <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <ResponsiveImage
+          src={images.heroContact}
+          alt=""
+          width={1536}
+          height={672}
+          sizes="100vw"
+          class="size-full object-cover"
+        />
+        <div class="absolute inset-0 bg-bg/85"></div>
+      </div>
+      <div class="relative z-10 max-w-[800px]">
+        <h1 class="font-serif text-5xl font-bold text-ink md:text-6xl">{contactContent.hero.title}</h1>
+        <p class="mt-5 text-xl leading-relaxed text-muted">{contactContent.hero.subtitle}</p>
+      </div>
+    </section>
+
+    <ElleaContactSection />
   </main>
 </PageLayout>

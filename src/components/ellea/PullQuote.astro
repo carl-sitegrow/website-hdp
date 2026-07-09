@@ -1,0 +1,12 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+<blockquote class="px-8 py-10 text-center md:px-[60px]">
+  <p class="font-serif text-3xl italic leading-snug text-brand md:text-4xl">"{text}"</p>
+  <div class="mt-6 flex justify-center">
+    <div class="h-0.5 w-10 rounded-sm bg-brand" aria-hidden="true"></div>
+  </div>
+</blockquote>

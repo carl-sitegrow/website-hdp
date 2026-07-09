@@ -11,7 +11,7 @@ const labels = {
     home: 'Accueil',
     blog: 'Blog',
     about: 'À propos',
-    contact: 'Nous joindre',
+    contact: 'Contact',
     services: 'Services',
     privacy: 'Politique de confidentialité',
     notFound: 'Page introuvable',
@@ -79,9 +79,7 @@ export type SitePageLink = {
 /** Liste centralisée des pages pour le plan du site HTML (FR). */
 export const frPagesList: SitePageLink[] = [
   { label: labels.fr.home, href: '/', section: 'main' },
-  { label: labels.fr.services, href: '/services/', section: 'main' },
   { label: labels.fr.blog, href: '/blog/', section: 'main' },
-  { label: labels.fr.about, href: '/a-propos/', section: 'main' },
   { label: labels.fr.contact, href: '/contact/', section: 'main' },
   { label: labels.fr.privacy, href: '/politique-de-confidentialite/', section: 'legal' },
 ];
