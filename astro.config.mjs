@@ -10,27 +10,20 @@ import rehypeExternalLinks from './rehype-external-links.js';
 import externalLinksIntegration from './astro-external-links.js';
 
 import tailwindcss from '@tailwindcss/vite';
-import { siteConfig } from './src/config/site.ts';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-// SITE_URL env (Vercel / .env) prioritaire ; sinon siteConfig.url.
-// Évite un build raté si la variable n’est pas encore définie sur Vercel.
-const siteUrl = process.env.SITE_URL || siteConfig.url;
-
-// Anti-oubli : refuse le build si l’URL reste le placeholder du skeleton.
-if (
-  process.argv[1]?.includes('astro') &&
-  process.argv[2] === 'build' &&
-  (!siteUrl || siteUrl.includes('exemple.com'))
-) {
+// Vérification anti-oubli : en prod, SITE_URL doit être défini pour que les
+// URLs canoniques, sitemaps et OG pointent sur le bon domaine.
+// On ne déclenche le check QUE sur `astro build` (pas `astro check` ni `astro dev`).
+if (process.argv[1]?.includes('astro') && process.argv[2] === 'build' && !process.env.SITE_URL) {
   throw new Error(
-    '[astro.config] SITE_URL manquant ou placeholder. Définissez SITE_URL (ex. https://ellea.fr) ou mettez à jour siteConfig.url.'
+    '[astro.config] SITE_URL manquant en production. Définissez la variable d’environnement SITE_URL avant de builder (ex. https://exemple.com).'
   );
 }
 
 export default defineConfig({
-  site: siteUrl,
+  site: process.env.SITE_URL || 'https://exemple.com',
   // Astro v5+ : 'hybrid' a fusionné avec 'static'. Les routes dynamiques
   // (middleware, /rss.xml, etc.) fonctionnent toujours via l'adaptateur.
   output: 'static',
